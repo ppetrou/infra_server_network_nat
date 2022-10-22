@@ -1,0 +1,27 @@
+---
+# tasks file for infra_server_network_nat
+
+# Enable firewalld
+- name: Enable firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+
+# Add external interface to public zone
+- name: Add external interface to public zone
+  ansible.posix.firewalld:
+    interface: "{{ external_interface }}"
+    zone: external
+    permanent: yes
+    immediate: yes
+    state: enabled
+
+# Add internal interface to internal zone
+- name: Add internal interface to internal zone
+  ansible.posix.firewalld:
+    interface: "{{ internal_interface }}"
+    zone: external
+    permanent: yes
+    immediate: yes
+    state: enabled
